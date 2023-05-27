@@ -1,3 +1,8 @@
+"""
+This code generates all possible routes using the API from point to point.
+"""
+
+
 from datetime import datetime, timedelta
 import googlemaps
 import folium
