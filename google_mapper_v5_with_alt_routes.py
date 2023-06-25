@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import googlemaps
 import folium
 import polyline
+import os
 
 #Carbon Emissions
     # MRT - 13g of CO2 per km source: https://www.lta.gov.sg/content/ltagov/en/who_we_are/statistics_and_publications/Connect/greenmrtstations.html
