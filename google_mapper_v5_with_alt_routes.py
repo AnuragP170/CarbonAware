@@ -2,11 +2,11 @@
 This code generates all possible routes using the API from point to point.
 """
 
-
 from datetime import datetime, timedelta
 import googlemaps
 import folium
 import polyline
+
 #Carbon Emissions
     # MRT - 13g of CO2 per km source: https://www.lta.gov.sg/content/ltagov/en/who_we_are/statistics_and_publications/Connect/greenmrtstations.html
     # Bus - 105g of CO2 per km source:  https://ourworldindata.org/travel-carbon-footprint
@@ -35,18 +35,22 @@ def print_step_details(step, distance):
     travel_mode = step['travel_mode']
 
     if travel_mode == 'TRANSIT':
+
         transit_details = step['transit_details']
         line = transit_details['line']
         vehicle = line['vehicle']
         vehicle_type = vehicle['type']
         print(f"Take {vehicle_type} ({line['name']}) from {start_address} to {end_address}")
+
         if vehicle_type == 'SUBWAY':
             emissions = SUBWAY_EMISSION * distance
         else:
             emissions = BUS_EMISSION * distance
+
     elif travel_mode == 'WALKING':
         print(f"Walk from {start_address} to {end_address}")
         emissions = WALKING_EMISSION * distance
+
     else:
         print(f"{travel_mode} from {start_address} to {end_address}")
         emissions = DRIVING_EMISSION * distance
@@ -85,7 +89,9 @@ for route in results:
     route_count+=1
 
     for leg in route['legs']:
+
         for step in leg['steps']:
+
             distance = step['distance']['value'] / 1000  # Convert distance to kilometers
             emissions = print_step_details(step, distance)
             total_emissions += emissions
@@ -97,7 +103,6 @@ for route in results:
 
     total_duration = calculate_total_duration(results)
     print(f"Total duration: {total_duration:.2f} minutes\n")
-
 
 
 # Extract the destination latitude and longitude
@@ -121,13 +126,16 @@ folium.Marker(location=[destination_lat, destination_lng], popup=destination_add
 
 # Add polylines for each step of the journey
 for leg in results[0]['legs']:
+
     for step in leg['steps']:
+
         polyline_points = step['polyline']['points']
         polyline_locations = polyline.decode(polyline_points)
         folium.PolyLine(locations=polyline_locations, color='green', weight=2).add_to(map)
 
 # Display the map
 map_name = input("\nSave your map by entering a name (if not, leave it blank): ")
+
 if map_name:
     map.save(map_name + ".html")
 
