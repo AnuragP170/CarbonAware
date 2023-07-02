@@ -1,6 +1,6 @@
 import networkx as nx
 import matplotlib.pyplot as plt
-import node_distance_calculator as nodeDist # requires file called node_distance_calculator.py file to generate list/tuple data structure from arrays.
+import node_distance_calculator as nodeDist
 
 class Graph:
     def __init__(self):
@@ -175,7 +175,8 @@ node_colors.update({node: 'green' for node in graph.nodes if node in [station[0]
                     node in [station[0] for station in green_main] or node in [station[0] for station in green_extended]})
 node_colors.update({node: 'blue' for node in graph.nodes if node in [station[0] for station in blue_stations]})
 node_colors.update({node: 'brown' for node in graph.nodes if node in [station[0] for station in brown_stations]})
-node_colors.update({'Marina South Pier': 'red', 'Promenade': 'yellow'})  # Add Marina South Pier and Promenade with blue color
+node_colors.update({'Marina South Pier': 'red', 'Promenade': 'yellow', 'Changi Airport':'green', 'Pasir Ris':'green', 'Gardens by the Bay':'brown', 'Punggol': 'purple'})  # Add Marina South Pier and Promenade with blue color
+
 
 # Draw the optimal path in blue
 path_edges = list(zip(shortest_path, shortest_path[1:]))
@@ -186,10 +187,13 @@ print("Optimal Path:", shortest_path)
 
 # Draw the graph with node and edge colors
 nx.draw_networkx(G, pos, node_color=[node_colors.get(node, 'black') for node in G.nodes()], edge_color=[node_colors.get((node, node2), 'black') for node, node2 in G.edges()], with_labels=True, node_size=500, width=1)
+# Label nodes with their names
 
 # Draw nodes with labels
 node_labels = {node: node for node in G.nodes()}
 nx.draw_networkx_labels(G, pos, labels=node_labels)
+edge_labels = nx.get_edge_attributes(G, 'weight')
+nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels, font_size=8)
 
 plt.title('Subway Lines - Optimal Path from {} to {}'.format(source_station, destination_station))
 plt.show()
