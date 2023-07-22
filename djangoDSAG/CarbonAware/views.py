@@ -2,28 +2,34 @@ from django.shortcuts import render
 from . import commandExecuter as exec
 import os
 from processing import concatDir as dirJoin
-import base64
-from django.http import FileResponse
-import glob
 from processing import mrtMap_IMG
-import base64
 from processing import gmap_iframe as mapEmbed	
 
 # Create your views here.
 
+# Function to display the homepage to take in values
 def index(request):
 
 		return render(request, 'html/index.html')
 
+# This function serves at the main processing point for the
+# Carbon Emissions Calculator. 
 def cecResults(request):
 	if request.method == "POST":
+
+		# Collection of values from the webpage
+		##################################################
 		transportMode=request.POST['transportMode']
 		vehicleType=request.POST['vehicleType']
 		fuelType=request.POST['fuelType']
 		startPoint=request.POST['startPoint']
 		endPoint=request.POST['endPoint']
 		metricType=request.POST['metricType']
+		##################################################
 
+		# Processing of the values that were taken in 
+		# from the webpage.
+		##################################################
 		if transportMode == "1":
 			transportMode = "Driving"
 		elif transportMode == "2":
@@ -55,7 +61,20 @@ def cecResults(request):
 			metricType = "Emissions"
 		else:
 			metricType = ""
+		##################################################
 
+		# This section of code deals with generation of the output for
+		# the directions. The "Concat Directory" function returns a 
+		# directory string, which is used to automate the execution of 
+		# the Google Mapper file for generation of directions.
+		#
+		# The execution of the Google Mapper file will return the 
+		# directions from the given start point and end point. This is stored
+		# in the "output" variable, which is a tuple. The relevant output is 
+		# taken from the tuple, namely the first entry, and then formatted
+		# using string manipulation to remove certain punctuation marks as well as
+		# special characters.
+		##################################################
 		workingDir = os.getcwd()
 		directory = dirJoin.concatDir(workingDir, "/processing")
 		command = ["python3", "google_mapper_v8.py", transportMode, vehicleType, fuelType, \
@@ -68,10 +87,17 @@ def cecResults(request):
 			output = output.replace("'", "", 2)
 		
 		formatted_output = output.replace('\\n', '\n').replace('\\t', '\t')
-		print (formatted_output)
+		##################################################
 
+		# This function points to a duplicate Google Mapper file, but instead
+		# of returning output, it returns a Folium map object to be rendered on the 
+		# webpage.
+		##################################################
 		map = mapEmbed.generateFMap(transportMode, vehicleType, fuelType, startPoint, endPoint, metricType)
+		##################################################
 
+		# Return the webpage to be loaded as well as the variables that will be
+		# displayed on the page.
 		return render(request, 'html/display.html', {'transportMode': transportMode, 
 					       	'vehicleType': vehicleType,
 						    'fuelType': fuelType,
@@ -86,9 +112,15 @@ def cecResults(request):
 def mrtOptimizer(request):
 	if request.method == 'POST':
 
+		# Collection of values from the webpage
+		##################################################
 		startMRT=request.POST['startMRT']
 		endMRT=request.POST['endMRT']
+		##################################################
 
+		# Processing of the values that were taken in 
+		# from the webpage.
+		##################################################
 		if startMRT == "11":
 			startMRT = "Ang Mo Kio (Red Line)"
 		elif startMRT=="12":
@@ -110,9 +142,20 @@ def mrtOptimizer(request):
 			endMRT = "Bedok North (Blue Line)"
 		else:
 			endMRT = "Orchard (Brown Line)"
+		##################################################
 
-		graph = mrtMap_IMG.generateMRTimage(startMRT, endMRT)
-
+		# This section of code deals with generation of the output for
+		# the directions. The "Concat Directory" function returns a 
+		# directory string, which is used to automate the execution of 
+		# the MRT Optimizer file for generation of directions.
+		#
+		# The execution of the MRT Optimizer file will return the 
+		# directions from the given start point and end point. This is stored
+		# in the "output" variable, which is a tuple. The relevant output is 
+		# taken from the tuple, namely the first entry, and then formatted
+		# using string manipulation to remove certain punctuation marks as well as
+		# special characters.
+		##################################################
 		workingDir = os.getcwd()
 		directory = dirJoin.concatDir(workingDir, "/processing")
 		command = ["python3", "mrt_route_optimizer_final.py", startMRT, endMRT]
@@ -125,5 +168,14 @@ def mrtOptimizer(request):
 		
 		formatted_output = output.replace('\\n', '\n').replace('\\t', '\t')
 		print (formatted_output)
+		##################################################
 
+		# This function points to a duplicate GMRT Optimizer file, but instead
+		# of returning output, it returns a MatPlotLib chart to be returned to
+		# the webpage for display.
+		##################################################
+		graph = mrtMap_IMG.generateMRTimage(startMRT, endMRT)
+
+		# Return the webpage to be loaded as well as the variables that will be
+		# displayed on the page.
 		return render(request, 'html/mrtMap.html', {'graph':graph, 'output':formatted_output})

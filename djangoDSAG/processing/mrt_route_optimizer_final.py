@@ -3,6 +3,8 @@ import networkx as nx
 import matplotlib.pyplot as plt
 import sys
 
+# Collect the variables through system arguments instead of input in order
+# to allow for automation of output generation.
 try:
     startMRT=(sys.argv[1])
     endMRT=(sys.argv[2])

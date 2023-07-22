@@ -24,6 +24,8 @@ WALKING_EMISSION = 0.0
 
 import sys
 
+# Collect the variables through system arguments instead of input in order
+# to allow for automation of output generation.
 try:
     transportMode=(sys.argv[1])
     vehicleType=(sys.argv[2])

@@ -21,6 +21,9 @@ CAR_DES_EMISSION = 171
 MTRCYCLE_EMISSION = 103
 WALKING_EMISSION = 0.0
 
+# The overarching function is created to take in variables from the webpage backend instead
+# of using input() to collect user input.
+##########################################################################################
 def generateFMap(transportMode, vehicleType, fuelType, startPoint, endPoint, metricType):
     def calculate_total_distance(route):
         return sum(leg['distance']['value'] for leg in route['legs']) / 1000  # Convert to km
@@ -156,5 +159,6 @@ def generateFMap(transportMode, vehicleType, fuelType, startPoint, endPoint, met
             polyline_locations = polyline.decode(polyline_points)
             folium.PolyLine(locations=polyline_locations, color='green', weight=2).add_to(map)
 
+    # Take the folium map object and return it as HTML codes.
     mapData = map._repr_html_()
     return mapData

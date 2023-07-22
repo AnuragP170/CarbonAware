@@ -5,6 +5,9 @@ import os
 from . import concatDir as dirJoin
 import mpld3
 
+# The overarching function is created to take in variables from the webpage backend instead
+# of using input() to collect user input.
+##########################################################################################
 def generateMRTimage(startMRT, endMRT):
 
     pwd = os.getcwd()
@@ -114,13 +117,6 @@ def generateMRTimage(startMRT, endMRT):
         color = data.get('color', 'gray') # use gray as default color if no color is specified
         nx.draw_networkx_edges(G, positions, edgelist=[(u, v)], edge_color=color)
 
-
-    # print all edges for debugging
-
-    # # Iterate over edges in the graph and print them
-    # for u, v, data in G.edges(data=True):
-    #     print(f"Edge: {u} -- {v} with weight: {data['weight']}")
-
     # Define start and end nodes
     start_node = startMRT
     end_node = endMRT
@@ -133,7 +129,6 @@ def generateMRTimage(startMRT, endMRT):
 
     # draw the shortest path in pink
     nx.draw_networkx_edges(G, positions, edgelist=shortest_path_edges, edge_color='magenta', width=5)
-
     nx.draw_networkx_labels(G, positions, labels, font_size=5)
 
     # Print shortest path
@@ -145,6 +140,8 @@ def generateMRTimage(startMRT, endMRT):
     # display the graph
     plt.axis('off')
 
+    # The MPLD3 function here generates the chart into HTML code to 
+    # be placed in the webpage.
     graph = mpld3.fig_to_html(fig)
 
     return graph
