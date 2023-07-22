@@ -1,0 +1,6 @@
+references:
+
+1. Plotting a route on google maps (API) in python, using folium library.
+
+https://www.codeforests.com/2021/01/23/plot-route-on-google-maps/
+https://towardsdatascience.com/how-to-plot-a-route-on-a-map-fb900a7f6605
