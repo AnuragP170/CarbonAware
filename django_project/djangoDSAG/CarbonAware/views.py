@@ -170,7 +170,7 @@ def mrtOptimizer(request):
 		print (formatted_output)
 		##################################################
 
-		# This function points to a duplicate GMRT Optimizer file, but instead
+		# This function points to a duplicate MRT Optimizer file, but instead
 		# of returning output, it returns a MatPlotLib chart to be returned to
 		# the webpage for display.
 		##################################################
