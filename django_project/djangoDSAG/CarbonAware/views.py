@@ -3,7 +3,7 @@ from . import commandExecuter as exec
 import os
 from processing import concatDir as dirJoin
 from processing import mrtMap_IMG
-from processing import gmap_iframe as mapEmbed	
+from processing import cec_iframe as mapEmbed	
 
 # Create your views here.
 
@@ -77,7 +77,7 @@ def cecResults(request):
 		##################################################
 		workingDir = os.getcwd()
 		directory = dirJoin.concatDir(workingDir, "/processing")
-		command = ["python3", "google_mapper_v8.py", transportMode, vehicleType, fuelType, \
+		command = ["python3", "carbon_emission_calculator.py", transportMode, vehicleType, fuelType, \
 	      startPoint, endPoint, metricType]
 		output = exec.execute(command, directory, workingDir)
 		
